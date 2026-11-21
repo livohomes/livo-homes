@@ -1,3 +1,5 @@
+export const revalidate = 86400; // 24 hours ISR
+
 export default function GalleryPage() {
   const images = [
     { src: '/images/hero1.png', title: 'Modern Living', category: 'Interior' },

@@ -51,6 +51,8 @@ export async function createProductAction(formData: FormData) {
   revalidatePath('/admin/products');
   revalidatePath('/products');
   revalidatePath('/');
+  revalidatePath('/category/[id]', 'page');
+  revalidatePath('/category/[id]/[subId]', 'page');
 }
 
 export async function updateProductAction(id: string, formData: FormData) {
@@ -106,12 +108,21 @@ export async function updateProductAction(id: string, formData: FormData) {
   revalidatePath('/admin/products');
   revalidatePath('/products');
   revalidatePath('/');
+  revalidatePath(`/products/${id}`);
+  revalidatePath('/products/[id]', 'page');
+  revalidatePath('/category/[id]', 'page');
+  revalidatePath('/category/[id]/[subId]', 'page');
 }
 
 export async function deleteProductAction(id: string) {
   await deleteProduct(id);
   revalidatePath('/admin/products');
   revalidatePath('/products');
+  revalidatePath('/');
+  revalidatePath(`/products/${id}`);
+  revalidatePath('/products/[id]', 'page');
+  revalidatePath('/category/[id]', 'page');
+  revalidatePath('/category/[id]/[subId]', 'page');
 }
 
 export async function fetchProductsAction() {

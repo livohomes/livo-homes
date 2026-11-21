@@ -55,7 +55,7 @@ export default function HeroSlider({ banners }: HeroSliderProps) {
                 fill
                 priority={current === 0}
                 sizes="100vw"
-                unoptimized={currentBanner.image.startsWith('data:')}
+                unoptimized
               />
             )
           ) : (

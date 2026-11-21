@@ -2,6 +2,21 @@ import { getProducts, getCategories, getSubcategories } from '@/lib/db';
 import { notFound } from 'next/navigation';
 import ProductDetailClient from './ProductDetailClient';
 
+export const revalidate = 86400; // 24 hours ISR
+export const dynamicParams = true;
+
+export async function generateStaticParams() {
+  try {
+    const products = await getProducts();
+    return products.map((p) => ({
+      id: p.id,
+    }));
+  } catch (error) {
+    console.error('generateStaticParams error in products/[id]:', error);
+    return [];
+  }
+}
+
 export default async function ProductDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const [products, categories, subcategories] = await Promise.all([

@@ -1,3 +1,5 @@
+export const revalidate = 86400; // 24 hours ISR
+
 export default function TermsPage() {
   return (
     <div className="container mx-auto px-8 py-24 pt-32 max-w-4xl min-h-[70vh]">

@@ -25,6 +25,8 @@ export async function createCategoryAction(formData: FormData) {
   revalidatePath('/admin/categories');
   revalidatePath('/admin/products');
   revalidatePath('/products');
+  revalidatePath('/');
+  revalidatePath('/category/[id]', 'page');
 }
 
 export async function updateCategoryAction(id: string, formData: FormData) {
@@ -49,6 +51,9 @@ export async function updateCategoryAction(id: string, formData: FormData) {
   revalidatePath('/admin/categories');
   revalidatePath('/admin/products');
   revalidatePath('/products');
+  revalidatePath('/');
+  revalidatePath(`/category/${id}`);
+  revalidatePath('/category/[id]', 'page');
 }
 
 export async function deleteCategoryAction(id: string) {
@@ -56,6 +61,9 @@ export async function deleteCategoryAction(id: string) {
   revalidatePath('/admin/categories');
   revalidatePath('/admin/products');
   revalidatePath('/products');
+  revalidatePath('/');
+  revalidatePath(`/category/${id}`);
+  revalidatePath('/category/[id]', 'page');
 }
 
 export async function fetchCategoriesAction() {

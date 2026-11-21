@@ -1,11 +1,13 @@
 import Link from 'next/link';
-import { getProducts, getCategories, getBanners, getSignatureMasterpieces, getRecentProducts, getSpecialProducts, Product, Category, Banner } from '@/lib/db';
+import { getCategories, getBanners, getSignatureMasterpieces, getRecentProducts, getSpecialProducts, Product, Category } from '@/lib/db';
 import { getWhatsAppLink, DEFAULT_INQUIRY_MESSAGE } from '@/lib/whatsapp';
 import MotionSection from '@/components/MotionSection';
 import MotionItem from '@/components/MotionItem';
 import ProductCard from '@/components/ProductCard';
 import CategoryCard from '@/components/CategoryCard';
 import HeroSlider from '@/components/HeroSlider';
+
+export const revalidate = 86400; // 24 hours ISR
 
 export default async function Home() {
   const [signatureMasterpieces, recentlyAdded, categories, banners, specialProducts] = await Promise.all([
@@ -15,7 +17,6 @@ export default async function Home() {
     getBanners(),
     getSpecialProducts(8)
   ]);
-  const latestProduct = recentlyAdded[0];
 
   return (
     <main className="pt-24 bg-background">

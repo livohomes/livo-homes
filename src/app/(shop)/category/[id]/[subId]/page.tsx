@@ -2,7 +2,7 @@ import { getProducts, getCategories, getSubcategories, getSubcategoryById } from
 import { notFound } from 'next/navigation';
 import SubcategoryClient from './SubcategoryClient';
 
-export const revalidate = 86400; // 24 hours ISR
+export const dynamic = 'force-dynamic';
 export const dynamicParams = true;
 
 export async function generateStaticParams() {
@@ -30,10 +30,10 @@ export default async function SubcategoryPage({ params }: { params: Promise<{ id
   }
 
   const allProducts = await getProducts();
-  // Filter by category and subcategory name
+  // Filter by category and subcategory name (case-insensitive, trimmed)
   const subcategoryProducts = allProducts.filter(p => 
-    p.category === categoryDetail.name && 
-    p.subcategory === subcategoryDetail.name
+    p.category?.trim().toLowerCase() === categoryDetail.name.trim().toLowerCase() && 
+    p.subcategory?.trim().toLowerCase() === subcategoryDetail.name.trim().toLowerCase()
   );
 
   return (

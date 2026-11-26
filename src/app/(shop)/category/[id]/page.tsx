@@ -1,8 +1,8 @@
-import { getCategories, getSubcategoriesByCategory } from '@/lib/db';
+import { getCategories, getSubcategoriesByCategory, getProducts } from '@/lib/db';
 import { notFound } from 'next/navigation';
 import CategoryClient from './CategoryClient';
 
-export const revalidate = 86400; // 24 hours ISR
+export const dynamic = 'force-dynamic';
 export const dynamicParams = true;
 
 export async function generateStaticParams() {
@@ -26,7 +26,23 @@ export default async function CategoryPage({ params }: { params: Promise<{ id: s
     notFound();
   }
 
-  const subcategories = await getSubcategoriesByCategory(id);
+  const [subcategories, allProducts] = await Promise.all([
+    getSubcategoriesByCategory(id),
+    getProducts(),
+  ]);
 
-  return <CategoryClient categoryDetail={categoryDetail} subcategories={subcategories} />;
+  const directProducts = allProducts.filter(
+    (p) =>
+      !p.isSpecial &&
+      p.category?.trim().toLowerCase() === categoryDetail.name.trim().toLowerCase() &&
+      !p.subcategory
+  );
+
+  return (
+    <CategoryClient
+      categoryDetail={categoryDetail}
+      subcategories={subcategories}
+      directProducts={directProducts}
+    />
+  );
 }

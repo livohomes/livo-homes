@@ -4,7 +4,7 @@ import MotionSection from '@/components/MotionSection';
 import MotionItem from '@/components/MotionItem';
 import ProductCard from '@/components/ProductCard';
 
-export const revalidate = 86400; // 24 hours ISR
+export const dynamic = 'force-dynamic';
 
 export default async function ProductsPage({
   searchParams,

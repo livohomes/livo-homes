@@ -1,15 +1,17 @@
 'use client';
 
 import Link from 'next/link';
-import { Subcategory } from '@/lib/db';
+import { Subcategory, Product } from '@/lib/db';
 import { CategoryDetail } from '@/data/products';
+import ProductCard from '@/components/ProductCard';
 
 interface CategoryClientProps {
   categoryDetail: CategoryDetail;
   subcategories: Subcategory[];
+  directProducts?: Product[];
 }
 
-export default function CategoryClient({ categoryDetail, subcategories }: CategoryClientProps) {
+export default function CategoryClient({ categoryDetail, subcategories, directProducts = [] }: CategoryClientProps) {
   return (
     <div className="pt-32 pb-24 px-8 max-w-[1440px] mx-auto min-h-screen">
       {/* Header */}
@@ -77,6 +79,21 @@ export default function CategoryClient({ categoryDetail, subcategories }: Catego
           </div>
         )}
       </section>
+
+      {/* Direct Category Products (added without a sub-collection) */}
+      {directProducts.length > 0 && (
+        <section className="mt-20">
+          <div className="flex items-center gap-4 mb-12">
+            <h2 className="font-headline text-2xl font-bold text-primary uppercase tracking-wider">Products</h2>
+            <div className="h-[1px] flex-1 bg-outline-variant/30"></div>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
+            {directProducts.map((product) => (
+              <ProductCard key={product.id} {...product} />
+            ))}
+          </div>
+        </section>
+      )}
     </div>
   );
 }

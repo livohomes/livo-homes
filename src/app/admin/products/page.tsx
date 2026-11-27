@@ -306,8 +306,8 @@ export default function AdminProducts() {
               <input name="finish" defaultValue={editingProduct?.finish || ''} placeholder="e.g. Brushed, PVD Coated" className="w-full bg-surface-container-low border border-outline-variant/30 focus:ring-2 focus:ring-primary/20 focus:border-primary rounded-xl px-5 py-4 text-sm font-medium transition-all" />
             </div>
             <div>
-              <label className="block font-bold text-primary text-[0.65rem] uppercase tracking-[0.2em] mb-3">Physical Size</label>
-              <input name="size" defaultValue={editingProduct?.size} placeholder="e.g. 450mm x 320mm" className="w-full bg-surface-container-low border border-outline-variant/30 focus:ring-2 focus:ring-primary/20 focus:border-primary rounded-xl px-5 py-4 text-sm font-medium transition-all" />
+              <label className="block font-bold text-primary text-[0.65rem] uppercase tracking-[0.2em] mb-3">Physical Size (One per line)</label>
+              <textarea name="size" rows={4} defaultValue={editingProduct?.size} placeholder={"NON ISI 16 MM\nHEAVY NON ISI 20 MM\nMEDIUM NON ISI 20 MM"} className="w-full bg-surface-container-low border border-outline-variant/30 focus:ring-2 focus:ring-primary/20 focus:border-primary rounded-xl px-5 py-4 text-sm font-medium transition-all" />
             </div>
             <div>
               <label className="block font-bold text-primary text-[0.65rem] uppercase tracking-[0.2em] mb-3">Inventory Count</label>

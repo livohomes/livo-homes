@@ -287,8 +287,8 @@ export default function ProductsControl() {
                 <input name="finish" defaultValue={editingProduct?.finish || ''} placeholder="e.g. Brushed, PVD Coated" className="w-full bg-background border border-outline/5 focus:ring-1 focus:ring-brand-accent/20 focus:border-brand-accent/40 rounded-sm px-5 py-4 text-xs font-bold transition-all outline-none" />
               </div>
               <div>
-                <label className="block font-black text-primary/40 text-[8px] uppercase tracking-[0.4em] mb-4">Dimensional Scale</label>
-                <input name="size" defaultValue={editingProduct?.size} placeholder="e.g. 450mm x 320mm" className="w-full bg-background border border-outline/5 focus:ring-1 focus:ring-brand-accent/20 focus:border-brand-accent/40 rounded-sm px-5 py-4 text-xs font-bold transition-all outline-none" />
+                <label className="block font-black text-primary/40 text-[8px] uppercase tracking-[0.4em] mb-4">Dimensional Scale (One per line)</label>
+                <textarea name="size" rows={4} defaultValue={editingProduct?.size} placeholder={"NON ISI 16 MM\nHEAVY NON ISI 20 MM\nMEDIUM NON ISI 20 MM"} className="w-full bg-background border border-outline/5 focus:ring-1 focus:ring-brand-accent/20 focus:border-brand-accent/40 rounded-sm px-5 py-4 text-xs font-bold transition-all outline-none" />
               </div>
               <div>
                 <label className="block font-black text-primary/40 text-[8px] uppercase tracking-[0.4em] mb-4">Inventory Register Count</label>

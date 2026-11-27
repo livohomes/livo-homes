@@ -117,9 +117,21 @@ export default function ProductDetailClient({ product, relatedProducts, categori
               )}
             </div>
 
-            <p className="text-secondary leading-relaxed font-light text-lg">
-              {product.description}
-            </p>
+            {product.description && product.description.includes('\n') ? (
+              <ul className="text-secondary leading-relaxed font-light text-lg space-y-1.5 list-disc list-inside">
+                {product.description
+                  .split('\n')
+                  .map((line) => line.trim())
+                  .filter(Boolean)
+                  .map((line, i) => (
+                    <li key={i}>{line}</li>
+                  ))}
+              </ul>
+            ) : (
+              <p className="text-secondary leading-relaxed font-light text-lg">
+                {product.description}
+              </p>
+            )}
           </MotionSection>
 
           <MotionSection delay={0.3} className="mt-12 space-y-6">
@@ -136,9 +148,21 @@ export default function ProductDetailClient({ product, relatedProducts, categori
                 <span className="text-sm text-secondary uppercase tracking-widest group-hover:text-primary transition-colors">Finish</span>
                 <span className="text-base text-primary font-medium">{product.finish || 'Standard Finish'}</span>
               </div>
-              <div className="py-4 flex justify-between items-center group">
+              <div className="py-4 flex justify-between items-start gap-4 group">
                 <span className="text-sm text-secondary uppercase tracking-widest group-hover:text-primary transition-colors">Dimensions</span>
-                <span className="text-base text-primary font-medium">{product.size || 'Bespoke Fit'}</span>
+                {product.size && product.size.includes('\n') ? (
+                  <ul className="text-base text-primary font-medium text-right space-y-1">
+                    {product.size
+                      .split('\n')
+                      .map((s) => s.trim())
+                      .filter(Boolean)
+                      .map((s, i) => (
+                        <li key={i}>{s}</li>
+                      ))}
+                  </ul>
+                ) : (
+                  <span className="text-base text-primary font-medium text-right">{product.size || 'Bespoke Fit'}</span>
+                )}
               </div>
               <div className="py-4 flex justify-between items-center group">
                 <span className="text-sm text-secondary uppercase tracking-widest group-hover:text-primary transition-colors">Availability</span>

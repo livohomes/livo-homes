@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
-import { createProductAction, deleteProductAction, fetchProductsAction, updateProductAction } from './actions';
+import { createProductAction, deleteProductAction, fetchProductsAction, updateProductAction, generateProductSlugsAction } from './actions';
 import { fetchCategoriesAction } from '../categories/actions';
 import { fetchSubcategoriesAction } from '../subcategories/actions';
 import { Product, Category, Subcategory } from '@/lib/db';
@@ -253,6 +253,24 @@ export default function AdminProducts() {
             <div className="md:col-span-2">
               <label className="block font-bold text-primary text-[0.65rem] uppercase tracking-[0.2em] mb-3">Product Name</label>
               <input name="name" required type="text" defaultValue={editingProduct?.name} placeholder="e.g. Helios Matte Monochrome" className="w-full bg-surface-container-low border border-outline-variant/30 focus:ring-2 focus:ring-primary/20 focus:border-primary rounded-xl px-5 py-4 text-sm font-medium transition-all" />
+            </div>
+            <div className="md:col-span-2">
+              <div className="flex items-center justify-between mb-3">
+                <label className="block font-bold text-primary text-[0.65rem] uppercase tracking-[0.2em]">URL Slug (Optional — auto-generated from name if blank)</label>
+                <button
+                  type="button"
+                  onClick={async () => {
+                    const res = await generateProductSlugsAction();
+                    const updatedProducts = await fetchProductsAction();
+                    setProducts(updatedProducts);
+                    alert(`Generated slugs for ${res.updated} existing product(s).`);
+                  }}
+                  className="text-[10px] font-bold uppercase tracking-widest text-brand-accent hover:underline"
+                >
+                  Generate Slugs for All Existing Products
+                </button>
+              </div>
+              <input name="slug" type="text" defaultValue={editingProduct?.slug || ''} placeholder="e.g. helios-matte-monochrome" className="w-full bg-surface-container-low border border-outline-variant/30 focus:ring-2 focus:ring-primary/20 focus:border-primary rounded-xl px-5 py-4 text-sm font-medium transition-all" />
             </div>
             <div>
               <label className="block font-bold text-primary text-[0.65rem] uppercase tracking-[0.2em] mb-3">

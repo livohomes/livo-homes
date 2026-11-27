@@ -8,6 +8,7 @@ import { getWhatsAppLink, getProductInquiryMessage } from '@/lib/whatsapp';
 
 export default function ProductCard({ 
   name, 
+  slug,
   price, 
   originalPrice, 
   category, 
@@ -17,7 +18,8 @@ export default function ProductCard({
   id = '1' 
 }: { 
   name: string, 
-  price: number, 
+  slug?: string,
+  price: number,  
   originalPrice?: number, 
   category?: string | null, 
   image: string, 
@@ -41,7 +43,7 @@ export default function ProductCard({
 
   return (
     <div className="group flex flex-col bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-700 border border-outline/5 hover:border-brand-accent/20 relative">
-      <Link href={`/products/${id}`} className="relative aspect-[4/5] overflow-hidden bg-surface-container-low block">
+      <Link href={`/products/${slug || id}`} className="relative aspect-[4/5] overflow-hidden bg-surface-container-low block">
         <Image 
           alt={name} 
           className="w-full h-full object-cover transition-transform duration-1000 ease-[0.19,1,0.22,1] group-hover:scale-110" 
@@ -84,7 +86,7 @@ export default function ProductCard({
         </div>
         
         <h4 className="text-sm font-headline font-black mb-4 flex-1 leading-tight tracking-tight">
-          <Link href={`/products/${id}`} className="text-primary hover:text-brand-accent transition-colors duration-300">
+          <Link href={`/products/${slug || id}`} className="text-primary hover:text-brand-accent transition-colors duration-300">
             {name}
           </Link>
         </h4>

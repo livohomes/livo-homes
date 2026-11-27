@@ -1,11 +1,12 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import { getProducts, addProduct, deleteProduct, updateProduct, Product } from '@/lib/db';
+import { getProducts, addProduct, deleteProduct, updateProduct, generateMissingProductSlugs, Product } from '@/lib/db';
 import { handleFileUploads } from '@/lib/uploads';
 
 export async function createProductAction(formData: FormData) {
   const name = formData.get('name') as string;
+  const slug = (formData.get('slug') as string)?.trim() || undefined;
   const category = formData.get('category') as string;
   const subcategory = formData.get('subcategory') as string;
   const price = parseFloat(formData.get('price') as string);
@@ -30,6 +31,7 @@ export async function createProductAction(formData: FormData) {
 
   await addProduct({
     name,
+    slug,
     category: isSpecial ? null : (category || null),
     subcategory: isSpecial ? null : (subcategory || null),
     price,
@@ -57,6 +59,7 @@ export async function createProductAction(formData: FormData) {
 
 export async function updateProductAction(id: string, formData: FormData) {
   const name = formData.get('name') as string;
+  const slug = (formData.get('slug') as string)?.trim() || undefined;
   const category = formData.get('category') as string;
   const subcategory = formData.get('subcategory') as string;
   const price = parseFloat(formData.get('price') as string);
@@ -88,6 +91,7 @@ export async function updateProductAction(id: string, formData: FormData) {
 
   await updateProduct(id, {
     name,
+    slug,
     category: isSpecial ? null : (category || null),
     subcategory: isSpecial ? null : (subcategory || null),
     price,
@@ -127,4 +131,15 @@ export async function deleteProductAction(id: string) {
 
 export async function fetchProductsAction() {
   return await getProducts();
+}
+
+export async function generateProductSlugsAction() {
+  const result = await generateMissingProductSlugs();
+  revalidatePath('/admin/products');
+  revalidatePath('/products');
+  revalidatePath('/');
+  revalidatePath('/products/[id]', 'page');
+  revalidatePath('/category/[id]', 'page');
+  revalidatePath('/category/[id]/[subId]', 'page');
+  return result;
 }

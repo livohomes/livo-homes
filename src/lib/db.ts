@@ -35,6 +35,7 @@ export interface SiteSettings {
 
 export interface Product {
   id: string;
+  slug?: string;
   name: string;
   category?: string | null;
   subcategory?: string | null;
@@ -76,6 +77,7 @@ export interface Subcategory {
 function mapDbProduct(p: any): Product {
   return {
     id: p.id,
+    slug: p.slug || undefined,
     name: p.name,
     category: p.category,
     subcategory: p.subcategory,
@@ -199,13 +201,25 @@ export async function saveProducts(products: Product[]): Promise<void> {
   }
 }
 
+export function slugifyProductName(name: string): string {
+  return name
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
 export async function addProduct(product: Omit<Product, 'id' | 'createdAt'>): Promise<Product> {
+  const computedSlug = product.slug?.trim()
+    ? slugifyProductName(product.slug)
+    : slugifyProductName(product.name);
   if (supabaseAdmin) {
     try {
       const { data, error } = await supabaseAdmin
         .from('products')
         .insert({
           name: product.name,
+          slug: computedSlug || null,
           category: product.category || null,
           price: product.price,
           original_price: product.originalPrice,
@@ -260,6 +274,7 @@ export async function updateProduct(id: string, updates: Partial<Product>): Prom
     if (updates.isSpecial !== undefined) dbUpdates.is_special = updates.isSpecial;
     if (updates.category !== undefined) dbUpdates.category = updates.category || null;
     if (updates.subcategory !== undefined) dbUpdates.subcategory = updates.subcategory || null;
+    if (updates.slug !== undefined) dbUpdates.slug = updates.slug?.trim() ? slugifyProductName(updates.slug) : null;
 
     delete dbUpdates.originalPrice;
     delete dbUpdates.isNew;
@@ -287,6 +302,30 @@ export async function updateProduct(id: string, updates: Partial<Product>): Prom
   products[index] = { ...products[index], ...updates };
   await saveProducts(products);
   return products[index];
+}
+
+export async function generateMissingProductSlugs(): Promise<{ updated: number }> {
+  const products = await getProducts();
+  const usedSlugs = new Set(
+    products.map((p) => p.slug?.trim()).filter((s): s is string => !!s)
+  );
+  let updated = 0;
+
+  for (const product of products) {
+    if (product.slug && product.slug.trim()) continue;
+    const base = slugifyProductName(product.name) || `product-${product.id}`;
+    let candidate = base;
+    let counter = 2;
+    while (usedSlugs.has(candidate)) {
+      candidate = `${base}-${counter}`;
+      counter++;
+    }
+    usedSlugs.add(candidate);
+    await updateProduct(product.id, { slug: candidate });
+    updated++;
+  }
+
+  return { updated };
 }
 
 export async function deleteProduct(id: string): Promise<boolean> {

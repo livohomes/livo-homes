@@ -2,7 +2,7 @@ import { getProducts, getCategories, getSubcategories } from '@/lib/db';
 import { notFound } from 'next/navigation';
 import ProductDetailClient from './ProductDetailClient';
 
-export const revalidate = 86400; // 24 hours ISR
+export const dynamic = 'force-dynamic';
 export const dynamicParams = true;
 
 export async function generateStaticParams() {
@@ -25,7 +25,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
     getSubcategories()
   ]);
   
-  const product = products.find(p => p.id === id);
+  const product = products.find(p => p.slug === id || p.id === id);
 
   if (!product) {
     notFound();
